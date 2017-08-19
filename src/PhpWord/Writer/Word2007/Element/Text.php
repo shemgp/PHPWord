@@ -41,6 +41,15 @@ class Text extends AbstractElement
 
         $this->startElementP();
 
+        if ($element->getBreakType())
+        {
+            $xmlWriter->startElement('w:r');
+            $xmlWriter->startElement('w:br');
+            $xmlWriter->writeAttribute('w:type', $element->getBreakType());
+            $xmlWriter->endElement(); // w:br
+            $xmlWriter->endElement(); // w:r
+        }
+
         $xmlWriter->startElement('w:r');
 
         $this->writeFontStyle();

@@ -48,17 +48,26 @@ class Text extends AbstractElement
     protected $paragraphStyle;
 
     /**
+     * Break type
+     *
+     * @var string| "page, column, or textWrapping"
+     */
+    protected $breakType;
+
+    /**
      * Create a new Text Element
      *
      * @param string $text
      * @param mixed $fontStyle
      * @param mixed $paragraphStyle
+     * @param string $breakType
      */
-    public function __construct($text = null, $fontStyle = null, $paragraphStyle = null)
+    public function __construct($text = null, $fontStyle = null, $paragraphStyle = null, $breakType = null)
     {
         $this->setText($text);
         $paragraphStyle = $this->setParagraphStyle($paragraphStyle);
         $this->setFontStyle($fontStyle, $paragraphStyle);
+        $this->breakType = $breakType;
     }
 
     /**
@@ -149,5 +158,15 @@ class Text extends AbstractElement
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Get break type
+     *
+     * @return string
+     */
+    public function getBreakType()
+    {
+        return $this->breakType;
     }
 }
