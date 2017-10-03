@@ -109,6 +109,9 @@ abstract class AbstractContainer extends AbstractElement
             // All other elements
             } else {
                 array_unshift($args, $element); // Prepend element name to the beginning of args array
+                if ($element == 'Text' && isset($args[1])
+                        && !is_object($args[1]) && !is_array($args[1]))
+                    $args[1] = htmlspecialchars($args[1]);
                 return call_user_func_array(array($this, 'addElement'), $args);
             }
         }
