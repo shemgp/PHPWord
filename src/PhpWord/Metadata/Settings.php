@@ -19,6 +19,7 @@ namespace PhpOffice\PhpWord\Metadata;
 use PhpOffice\PhpWord\ComplexType\ProofState;
 use PhpOffice\PhpWord\SimpleType\Zoom;
 use PhpOffice\PhpWord\ComplexType\TrackChangesView;
+use PhpOffice\PhpWord\Style\Language;
 
 /**
  * Setting class
@@ -99,6 +100,13 @@ class Settings
      * @var bool
      */
     private $evenAndOddHeaders = false;
+
+    /**
+     * Theme Font Languages
+     * 
+     * @var Language
+     */
+    private $themeFontLang;
 
     /**
      * Radix Point for Field Code Evaluation
@@ -203,7 +211,7 @@ class Settings
 
     /**
      * Get the Visibility of Annotation Types
-     * 
+     *
      * @return \PhpOffice\PhpWord\ComplexType\TrackChangesView
      */
     public function getRevisionView()
@@ -213,7 +221,7 @@ class Settings
 
     /**
      * Set the Visibility of Annotation Types
-     * 
+     *
      * @param TrackChangesView $trackChangesView
      */
     public function setRevisionView(TrackChangesView $trackChangesView = null)
@@ -292,8 +300,28 @@ class Settings
     }
 
     /**
-     * Returns the Radix Point for Field Code Evaluation
+     * Returns the Language
      * 
+     * @return Language
+     */
+    public function getThemeFontLang()
+    {
+        return $this->themeFontLang;
+    }
+
+    /**
+     * sets the Language for this document
+     * 
+     * @param Language $themeFontLang
+     */
+    public function setThemeFontLang($themeFontLang)
+    {
+        $this->themeFontLang = $themeFontLang;
+    }
+
+    /**
+     * Returns the Radix Point for Field Code Evaluation
+     *
      * @return string
      */
     public function getDecimalSymbol()
@@ -303,7 +331,7 @@ class Settings
 
     /**
      * sets the Radix Point for Field Code Evaluation
-     * 
+     *
      * @param string $decimalSymbol
      */
     public function setDecimalSymbol($decimalSymbol)

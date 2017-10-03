@@ -17,9 +17,9 @@
 
 namespace PhpOffice\PhpWord\Writer\Word2007\Part;
 
-use PhpOffice\PhpWord\Settings as DocumentSettings;
 use PhpOffice\PhpWord\ComplexType\ProofState;
 use PhpOffice\PhpWord\ComplexType\TrackChangesView;
+use PhpOffice\PhpWord\Style\Language;
 
 /**
  * Word2007 settings part writer: word/settings.xml
@@ -110,7 +110,6 @@ class Settings extends AbstractPart
             'w:defaultTabStop' => array('@attributes' => array('w:val' => '708')),
             'w:hyphenationZone' => array('@attributes' => array('w:val' => '425')),
             'w:characterSpacingControl' => array('@attributes' => array('w:val' => 'doNotCompress')),
-            'w:themeFontLang' => array('@attributes' => array('w:val' => 'en-US')),
             'w:decimalSymbol' => array('@attributes' => array('w:val' => $documentSettings->getDecimalSymbol())),
             'w:listSeparator' => array('@attributes' => array('w:val' => ';')),
             'w:compat' => array(),
@@ -152,6 +151,7 @@ class Settings extends AbstractPart
         $this->setOnOffValue('w:doNotTrackFormatting', $documentSettings->hasDoNotTrackFormatting());
         $this->setOnOffValue('w:evenAndOddHeaders', $documentSettings->hasEvenAndOddHeaders());
 
+        $this->setThemeFontLang($documentSettings->getThemeFontLang());
         $this->setRevisionView($documentSettings->getRevisionView());
         $this->setDocumentProtection($documentSettings->getDocumentProtection());
         $this->setProofState($documentSettings->getProofState());
@@ -161,7 +161,7 @@ class Settings extends AbstractPart
 
     /**
      * Adds a boolean attribute to the settings array
-     * 
+     *
      * @param string $settingName
      * @param boolean $booleanValue
      */
@@ -179,7 +179,7 @@ class Settings extends AbstractPart
     /**
      * Get protection settings.
      *
-     * @param \PhpOffice\PhpWord\Metadata\Settings $documentProtection
+     * @param \PhpOffice\PhpWord\Metadata\Protection $documentProtection
      * @return void
      */
     private function setDocumentProtection($documentProtection)
@@ -212,14 +212,13 @@ class Settings extends AbstractPart
     }
 
     /**
-     * Set the Proof state
+     * Set the Revision View
      *
-     * @param ProofState $proofState
+     * @param TrackChangesView $trackChangesView
      */
     private function setRevisionView(TrackChangesView $trackChangesView = null)
     {
         if ($trackChangesView != null) {
-
             $revisionView['w:markup'] = $trackChangesView->hasMarkup() ? 'true': 'false';
             $revisionView['w:comments'] = $trackChangesView->hasComments() ? 'true': 'false';
             $revisionView['w:insDel'] = $trackChangesView->hasInsDel() ? 'true': 'false';
@@ -231,8 +230,25 @@ class Settings extends AbstractPart
     }
 
     /**
-     * Set the magnification
+     * Sets the language
      * 
+     * @param Language $language
+     */
+    private function setThemeFontLang(Language $language = null)
+    {
+        $latinLanguage = ($language == null || $language->getLatin() === null) ? 'en-US' : $language->getLatin();
+        $lang = array();
+        $lang['w:val'] = $latinLanguage;
+        if ($language != null) {
+            $lang['w:eastAsia'] = $language->getEastAsia() === null ? 'x-none' : $language->getEastAsia();
+            $lang['w:bidi'] = $language->getBidirectional() === null ? 'x-none' : $language->getBidirectional();
+        }
+        $this->settings['w:themeFontLang'] = array('@attributes' => $lang);
+    }
+
+    /**
+     * Set the magnification
+     *
      * @param mixed $zoom
      */
     private function setZoom($zoom = null)
